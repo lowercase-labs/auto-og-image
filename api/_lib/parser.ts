@@ -62,8 +62,7 @@ export async function parseURLRequest(req: Request, startSkipWord: string = '') 
 	const { url } = query || {};
 	const scraper = metascraper([desc(), title()]);
 	const targetUrl = String(url) || '';
-	const isDev = !process.env.AWS_REGION;
-	const page = await getPage(isDev);
+	const page = await getPage();
 	await page.goto(targetUrl, { waitUntil: 'networkidle2' });
 	const html = await page.content();
 
