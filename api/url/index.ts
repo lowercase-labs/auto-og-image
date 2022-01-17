@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { parseURLRequest } from '../_lib/parser';
-import { getScreenshot } from '../_lib/chromium';
 import { getHtml } from '../_lib/template';
+import { getScreenshot } from '../_lib/chromium';
 
 export default async function handler(req: Request, res: Response) {
 	try {

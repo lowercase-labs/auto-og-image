@@ -97,7 +97,7 @@ function getCss(fontSize: string) {
 }
 
 export function getHtml(parsedReq: ParsedRequest) {
-	const { fontSize, logo, academyName, courseName } = parsedReq;
+	const { fontSize, academyName, courseName } = parsedReq;
 	return `<!DOCTYPE html>
 <html>
     <meta charset="utf-8">
@@ -109,50 +109,9 @@ export function getHtml(parsedReq: ParsedRequest) {
     <body>
         <div>
             <div class="spacer">
-                <div class="logo-wrapper">
-                    ${isEmoji(logo) ? emojify(logo) : getImage(logo)}
-                </div>
-            <div class="spacer">
-                <div class="heading">${emojify(marked(academyName))} ${courseName ? emojify(marked(courseName)) : ''}
+                <div class="heading">${emojify(marked(academyName))} ${courseName ? emojify(marked(courseName)) : ''}</div>
             </div>
         </div>
     </body>
 </html>`;
-}
-export function getURLHtml(parsedReq: ParsedRequest) {
-	const { fontSize, logo, academyName, courseName } = parsedReq;
-	return `<!DOCTYPE html>
-<html>
-    <meta charset="utf-8">
-    <title>Generated Image</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        ${getCss(fontSize)}
-    </style>
-    <body>
-        <div>
-            <div class="spacer">
-                <div class="logo-wrapper">
-                    ${isEmoji(logo) ? emojify(logo) : getImage(logo)}
-                </div>
-            <div class="spacer">
-                <div class="heading">${emojify(marked(academyName))} ${courseName ? emojify(marked(courseName)) : ''}
-            </div>
-        </div>
-    </body>
-</html>`;
-}
-
-function getImage(src: string, width = 'auto', height = '225') {
-	return `<img
-        class="logo"
-        alt="Generated Image"
-        src="${sanitizeHtml(src)}"
-        width="${sanitizeHtml(width)}"
-        height="${sanitizeHtml(height)}"
-    />`;
-}
-
-function isEmoji(linkOrEmoji: string) {
-	return /\p{Extended_Pictographic}/u.test(linkOrEmoji);
 }
