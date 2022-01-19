@@ -10,7 +10,7 @@ export async function parseURLRequest(req: Request, startSkipWord: string = '') 
 	console.log('HTTP ' + req.url, startSkipWord);
 	const { query } = parse(req.url || '/', true);
 	const { url  } = query || {};
-	const scraper = metascraper([desc(), title()]);
+	const scraper = metascraper([title(), desc()]);
 	const targetUrl = String(url) || '';
 	const page = await getPage();
 	await page.goto(targetUrl, { waitUntil: 'networkidle2' });
@@ -19,26 +19,17 @@ export async function parseURLRequest(req: Request, startSkipWord: string = '') 
 	const metadata = await scraper({ html, url: targetUrl });
 	console.log(metadata);
 
-	let extension = '';
-	let academyName = '';
-	let courseName = '';
-	if (metadata && metadata.title) {
-		academyName = metadata.title;
-	} else {
-		academyName = '';
-	}
-	if (metadata && metadata.description) {
-		courseName = metadata.description;
-	} else {
-		courseName = '';
+	let extension = '', imgTitle = '', imgDesc = '';
+	if (metadata) {
+		imgTitle = metadata.title ? metadata.title : '';
+		imgDesc = metadata.description ? metadata.description : '';
 	}
 
 	const parsedRequest: ParsedRequest = {
 		fileType: extension === 'jpeg' ? extension : 'png',
-		academyName: decodeURIComponent(academyName),
-		fontSize: '16px',
+		imgTitle: decodeURIComponent(imgTitle),
+		imgDesc: imgDesc || '',
 		logo: '',
-		courseName: courseName || '',
 		textColor: '',
 		bgColor: 'black',
 	};

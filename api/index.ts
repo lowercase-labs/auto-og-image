@@ -1,7 +1,7 @@
 import express from 'express';
 import { Request, Response } from 'express';
 import url from './url/index';
-require('dotenv').config()
+require('dotenv').config();
 
 const port = Number(process.env.PORT) || 8080;
 
