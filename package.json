@@ -3,7 +3,8 @@
     "scripts": {
         "start": "node api/dist/index.js",
         "clean": "rimraf api/dist/",
-        "gcp-build": "tsc -p api/tsconfig.json",
+        "prepare": "copyfiles -u 1 public/**/* api/dist/",
+        "gcp-build": "npm run clean && npm run prepare && tsc -p api/tsconfig.json",
         "dev": "npm run gcp-build && npm run start"
     },
     "dependencies": {
