@@ -5,63 +5,38 @@ import metascraper from 'metascraper';
 import desc from 'metascraper-description';
 import title from 'metascraper-title';
 import { getPage } from './chromium';
-
-export function parseRequest(req: Request) {
-	console.log('HTTP ' + req.url);
-	const { pathname, query } = parse(req.url || '/', true);
-	const { fontSize, logo, courseName, textColor, bgColor } = query || {};
-
-	if (Array.isArray(fontSize)) {
-		throw new Error('Expected a single fontSize');
-	}
-	if (Array.isArray(logo)) {
-		throw new Error('Expected a single Logo');
-	}
-	if (Array.isArray(courseName)) {
-		throw new Error('Expected a single CourseName');
-	}
-	let textColorTemp: string | undefined = '';
-	let bgColorTemp: string | undefined = '';
-	if (!textColor) {
-		textColorTemp = textColor;
-	}
-	if (!bgColor) {
-		bgColorTemp = bgColor;
-	}
-
-	let arr = (pathname || '/').slice(1).split('.');
-	console.log(arr);
-
-	arr[0] = arr[0].split('/')[1];
-	let extension = '';
-	let academyName = '';
-	if (arr.length === 0) {
-		academyName = '';
-	} else if (arr.length === 1) {
-		academyName = arr[0];
-	} else {
-		extension = arr.pop() as string;
-		academyName = arr.join('.');
-	}
-
-	const parsedRequest: ParsedRequest = {
-		fileType: extension === 'jpeg' ? extension : 'png',
-		academyName: decodeURIComponent(academyName),
-		fontSize: fontSize || '96px',
-		logo: logo || '',
-		courseName: courseName,
-		textColor: textColorTemp,
-		bgColor: bgColorTemp,
-	};
-	return parsedRequest;
-}
+import { db } from '../plugins/firebase';
+import { doc, getDoc } from "firebase/firestore";
 
 export async function parseURLRequest(req: Request, startSkipWord: string = '') {
+
+	
+
 	console.log('HTTP ' + req.url, startSkipWord);
 	const { query } = parse(req.url || '/', true);
-	const { url } = query || {};
-	const scraper = metascraper([desc(), title()]);
+
+
+	const { url  } = query || {};
+	const scraper = metascraper([title(), desc()]);
 	const targetUrl = String(url) || '';
+
+	const domainRegex = /^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/igm; //Regex found here - https://regex101.com/r/wN6cZ7/365
+	const regexArray =  domainRegex.exec(String(url));
+	console.log(regexArray);
+	const domain = regexArray ? regexArray[1] : '';
+
+	const docRef = doc(db, "enterprise-accounts", domain);
+	const docSnap = await getDoc(docRef);
+	
+	if (docSnap.exists()) {
+		console.log("Document data:", docSnap.data());
+	} else {
+	    // doc.data() will be undefined in this case
+		console.log("No such document!");
+	}
+
+
+
 	const page = await getPage();
 	await page.goto(targetUrl, { waitUntil: 'networkidle2' });
 	const html = await page.content();
@@ -69,28 +44,19 @@ export async function parseURLRequest(req: Request, startSkipWord: string = '') 
 	const metadata = await scraper({ html, url: targetUrl });
 	console.log(metadata);
 
-	let extension = '';
-	let academyName = '';
-	let courseName = '';
-	if (metadata && metadata.title) {
-		academyName = metadata.title;
-	} else {
-		academyName = '';
-	}
-	if (metadata && metadata.description) {
-		courseName = metadata.description;
-	} else {
-		courseName = '';
+	let extension = '', imgTitle = '', imgDesc = '';
+	if (metadata) {
+		imgTitle = metadata.title ? metadata.title : '';
+		imgDesc = metadata.description ? metadata.description : '';
 	}
 
 	const parsedRequest: ParsedRequest = {
 		fileType: extension === 'jpeg' ? extension : 'png',
-		academyName: decodeURIComponent(academyName),
-		fontSize: '16px',
+		imgTitle: decodeURIComponent(imgTitle),
+		imgDesc: imgDesc || '',
 		logo: '',
-		courseName: courseName || '',
 		textColor: '',
-		bgColor: '',
+		bgColor: 'black',
 	};
 	return parsedRequest;
 }
