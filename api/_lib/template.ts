@@ -6,9 +6,9 @@ import twemoji from 'twemoji';
 const twOptions = { folder: 'svg', ext: '.svg' };
 const emojify = (text: string) => twemoji.parse(text, twOptions);
 
-const rglr = readFileSync(`${__dirname}/../../_fonts/Inter-Regular.woff2`).toString('base64');
-const bold = readFileSync(`${__dirname}/../../_fonts/Inter-Bold.woff2`).toString('base64');
-const mono = readFileSync(`${__dirname}/../../_fonts/Vera-Mono.woff2`).toString('base64');
+const rglr = readFileSync(`${__dirname}/../_fonts/Inter-Regular.woff2`).toString('base64');
+const bold = readFileSync(`${__dirname}/../_fonts/Inter-Bold.woff2`).toString('base64');
+const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString('base64');
 
 function getCss(fontSize: string) {
 	let background = 'white';
@@ -97,29 +97,6 @@ function getCss(fontSize: string) {
 }
 
 export function getHtml(parsedReq: ParsedRequest) {
-	const { fontSize, logo, academyName, courseName } = parsedReq;
-	return `<!DOCTYPE html>
-<html>
-    <meta charset="utf-8">
-    <title>Generated Image</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        ${getCss(fontSize)}
-    </style>
-    <body>
-        <div>
-            <div class="spacer">
-                <div class="logo-wrapper">
-                    ${isEmoji(logo) ? emojify(logo) : getImage(logo)}
-                </div>
-            <div class="spacer">
-                <div class="heading">${emojify(marked(academyName))} ${courseName ? emojify(marked(courseName)) : ''}
-            </div>
-        </div>
-    </body>
-</html>`;
-}
-export function getURLHtml(parsedReq: ParsedRequest) {
 	const { fontSize, logo, academyName, courseName } = parsedReq;
 	return `<!DOCTYPE html>
 <html>

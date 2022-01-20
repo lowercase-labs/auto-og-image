@@ -2,12 +2,14 @@
     "private": true,
     "scripts": {
         "start": "node api/dist/index.js",
+        "clean": "rimraf api/dist/",
         "gcp-build": "tsc -p api/tsconfig.json",
         "dev": "npm run gcp-build && npm run start"
     },
     "dependencies": {
+        "dotenv": "^11.0.0",
         "express": "^4.17.2",
-        "marked": "2.0.0",
+        "marked": "^4.0.10",
         "metascraper": "^5.25.7",
         "metascraper-description": "^5.25.7",
         "metascraper-title": "^5.25.7",
@@ -19,7 +21,8 @@
         "@types/marked": "1.2.2",
         "@types/puppeteer": "5.4.3",
         "@types/twemoji": "^12.1.2",
-        "dotenv": "^11.0.0",
+        "copyfiles": "^2.4.1",
+        "rimraf": "^3.0.2",
         "typescript": "4.1.5"
     }
 }
