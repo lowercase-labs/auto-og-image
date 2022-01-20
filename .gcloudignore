@@ -4,3 +4,4 @@
 node_modules/
 app/dist
 .env
+api/public/css/style.css

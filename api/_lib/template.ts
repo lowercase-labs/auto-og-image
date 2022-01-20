@@ -2,9 +2,10 @@ import { readFileSync } from 'fs';
 // import { sanitizeHtml } from './sanitizer';
 import { ParsedRequest } from './types';
 
-const rglr = readFileSync(`${__dirname}/../_fonts/Inter-Regular.woff2`).toString('base64');
-const bold = readFileSync(`${__dirname}/../_fonts/Inter-Bold.woff2`).toString('base64');
-const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString('base64');
+const rglr = readFileSync(`${__dirname}/../public/_fonts/Inter-Regular.woff2`).toString('base64');
+const bold = readFileSync(`${__dirname}/../public/_fonts/Inter-Bold.woff2`).toString('base64');
+const mono = readFileSync(`${__dirname}/../public/_fonts/Vera-Mono.woff2`).toString('base64');
+const tailwindcss = readFileSync(`${__dirname}/../public/css/style.css`).toString();
 
 function getCss() {
 	let foreground = 'black';
@@ -83,6 +84,7 @@ function getCss() {
         font-weight: normal;
         color: ${foreground};
     }
+    ${tailwindcss}
     `;
 }
 
@@ -90,9 +92,11 @@ export function getHtml(parsedReq: ParsedRequest) {
 	const { imgTitle, imgDesc } = parsedReq;
 	return `<!DOCTYPE html>
         <html>
-            <meta charset="utf-8">
-            <title>Generated Image</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <head>
+                <meta charset="utf-8">
+                <title>Generated Image</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+            </head>
             <style>
                 ${getCss()}
             </style>
@@ -100,7 +104,7 @@ export function getHtml(parsedReq: ParsedRequest) {
                 <div>
                     <div class="spacer">
                         <div class="text-container">
-                            <h1 class="heading">${imgTitle}</h1> 
+                            <h1 class="heading text-indigo-600">${imgTitle}</h1> 
                             <h2 class="sub-heading">${imgDesc}</h2>
                         </div>
                     </div>
