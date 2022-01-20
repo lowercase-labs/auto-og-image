@@ -9,7 +9,7 @@ export default async function handler(req: Request, res: Response) {
 	try {
 		const isHtmlDebug = Number(process.env.OG_HTML_DEBUG) === 1;
 		const parsedReq = await parseURLRequest(req, 'url');
-		const html = await getHtml(parsedReq);
+		const html = getHtml(parsedReq);
 		const docRef = doc(db, "enterprise-accounts", "saurya.com");
 		const docSnap = await getDoc(docRef);
 		if (docSnap.exists()) {

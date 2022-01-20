@@ -23,7 +23,6 @@
         "@types/twemoji": "^12.1.2",
         "autoprefixer": "^10.4.2",
         "copyfiles": "^2.4.1",
-        "dotenv": "^11.0.0",
         "postcss": "^8.4.5",
         "postcss-cli": "^9.1.0",
         "rimraf": "^3.0.2",
