@@ -2,29 +2,17 @@ import { Request, Response } from 'express';
 import { parseURLRequest } from '../_lib/parser';
 import { getHtml } from '../_lib/template';
 import { getScreenshot } from '../_lib/chromium';
-import { db } from '../plugins/firebase';
-import { doc, getDoc } from "firebase/firestore";
 
 export default async function handler(req: Request, res: Response) {
 	try {
 		const isHtmlDebug = Number(process.env.OG_HTML_DEBUG) === 1;
 		const parsedReq = await parseURLRequest(req, 'url');
 		const html = getHtml(parsedReq);
-		const docRef = doc(db, "enterprise-accounts", "saurya.com");
-		const docSnap = await getDoc(docRef);
-		if (docSnap.exists()) {
-			console.log("Document data:", docSnap.data());
-		} else {
-		// doc.data() will be undefined in this case
-			console.log("No such document!");
-		}
-		
 		if (isHtmlDebug) {
 			res.setHeader('Content-Type', 'text/html');
 			res.end(html);
 			return;
 		}
-		
 		const { fileType } = parsedReq;
 		const file = await getScreenshot(html, fileType);
 		res.statusCode = 200;

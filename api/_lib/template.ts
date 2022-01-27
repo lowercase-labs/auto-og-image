@@ -7,7 +7,7 @@ const bold = readFileSync(`${__dirname}/../public/_fonts/Inter-Bold.woff2`).toSt
 const mono = readFileSync(`${__dirname}/../public/_fonts/Vera-Mono.woff2`).toString('base64');
 const tailwindcss = readFileSync(`${__dirname}/../public/css/style.css`).toString();
 
-function getCss() {
+const getCss = () => {
 	let foreground = 'black';
 	return `
     @font-face {
@@ -62,10 +62,6 @@ function getCss() {
         font-size: 100px;
     }
 
-    .spacer {
-        margin: 100px;
-    }
-
     .emoji {
         height: 1em;
         width: 1em;
@@ -87,9 +83,57 @@ function getCss() {
     ${tailwindcss}
     `;
 }
-
+const getHtmlTemplate = (imgDomain: string, imgTitle:string, imgDesc:string, templateID: number, color: string) => {
+    let htmlString;
+    switch(templateID) {
+        case 1:
+            htmlString = `
+            <body class="border-t-8 border-${color}-600">
+                <div class="container w-100">
+                    <div class="spacer">
+                        <div class="text-container text-left space-y-4">
+                            <h3 class="text-xl text-${color}-900">${imgDomain}</h3>
+                            <h2 class="sub-heading text-3xl">${imgDesc}</h2>
+                        </div>
+                    </div>
+                </div>
+            </body>
+            `;
+            break;
+        case 2:
+            htmlString = `
+            <body class="border-t-8 border-${color}-600">
+                <div class="container w-100">
+                    <div class="spacer">
+                        <div class="text-container text-left space-y-4">
+                            <h3 class="text-xl text-${color}-900">${imgDomain}</h3>
+                            <h1 class="font-bold text-5xl text-${color}-600">${imgTitle}</h1> 
+                            <h2 class="sub-heading text-3xl">${imgDesc}</h2>
+                        </div>
+                    </div>
+                </div>
+            </body>
+            `;
+            break;
+        default:
+            htmlString = `
+            <body class="border-t-8 border-${color}-600">
+                <div class="container w-100">
+                    <div class="spacer">
+                        <div class="text-container text-left space-y-4">
+                            <h3 class="text-xl text-${color}-900">${imgDomain}</h3>
+                            <h1 class="font-bold text-5xl text-${color}-600">${imgTitle}</h1> 
+                            <h2 class="sub-heading text-3xl">${imgDesc}</h2>
+                        </div>
+                    </div>
+                </div>
+            </body>
+            `;
+    }
+    return htmlString;
+}
 export function getHtml(parsedReq: ParsedRequest) {
-	const { imgTitle, imgDesc } = parsedReq;
+	const { imgDomain, imgTitle, imgDesc, templateID, color } = parsedReq;
 	return `<!DOCTYPE html>
         <html>
             <head>
@@ -100,15 +144,6 @@ export function getHtml(parsedReq: ParsedRequest) {
             <style>
                 ${getCss()}
             </style>
-            <body>
-                <div>
-                    <div class="spacer">
-                        <div class="text-container">
-                            <h1 class="heading text-indigo-600">${imgTitle}</h1> 
-                            <h2 class="sub-heading">${imgDesc}</h2>
-                        </div>
-                    </div>
-                </div>
-            </body>
+            ${getHtmlTemplate(imgDomain, imgTitle, imgDesc, templateID, color)}
         </html>`;
 }
