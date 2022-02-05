@@ -5,23 +5,11 @@ import metascraper from 'metascraper';
 import title from 'metascraper-title';
 import desc from 'metascraper-description';
 import { getPage } from './chromium';
-import { supabase } from '../plugins/supabase';
 
 const getDomain = (url: string) => {
 	const domainRegex = /^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/gim; //Regex found here - https://regex101.com/r/wN6cZ7/365
 	const regexArray = domainRegex.exec(url);
 	return regexArray ? regexArray[1] : '';
-}
-
-const fetchSettings =async (domain: string) => {
-	let { data: Accounts, error } = await supabase
-	.from('Accounts')
-	.select("*")
-	.eq('domain', domain)
-	if(error) {
-		return {}
-	}
-	return Accounts;
 }
 
 export async function parseURLRequest(req: Request, startSkipWord: string = '') {
@@ -32,9 +20,6 @@ export async function parseURLRequest(req: Request, startSkipWord: string = '') 
 	const targetUrl = String(url) || '';
 	
 	const domain = getDomain(String(url));
-	const settings = await fetchSettings(domain);
-	console.log(settings);
-	console.log(domain)
 	const page = await getPage();
 	await page.goto(targetUrl, { waitUntil: 'networkidle2' });
 	const html = await page.content();
