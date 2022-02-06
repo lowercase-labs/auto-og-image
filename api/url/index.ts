@@ -4,6 +4,7 @@ import { getScreenshot, parseURLRequest } from '../_lib/utils';
 
 export default async function handler(req: Request, res: Response) {
 	try {
+		// Deploy
 		const isHtmlDebug = Number(process.env.OG_HTML_DEBUG) === 1;
 		const parsedReq = await parseURLRequest(req, 'url');
 		const html = getHtml(parsedReq);
