@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import { parseURLRequest } from '../_lib/parser';
 import { getHtml } from '../_lib/template';
-import { getScreenshot } from '../_lib/chromium';
+import { getScreenshot, parseURLRequest } from '../_lib/utils';
 
 export default async function handler(req: Request, res: Response) {
 	try {
@@ -19,6 +18,7 @@ export default async function handler(req: Request, res: Response) {
 		res.setHeader('Content-Type', `image/${fileType}`);
 		res.setHeader('Cache-Control', `public, immutable, no-transform, s-maxage=31536000, max-age=31536000`);
 		res.end(file);
+	
 	} catch (e) {
 		res.statusCode = 500;
 		res.setHeader('Content-Type', 'text/html');
