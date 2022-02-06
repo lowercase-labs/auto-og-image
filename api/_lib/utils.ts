@@ -8,7 +8,7 @@ import metascraper from 'metascraper';
 import title from 'metascraper-title';
 import desc from 'metascraper-description';
 
-export async function getPage() {
+const getPage = async () => {
 	if (_page) {
 		return _page;
 	}
@@ -21,21 +21,20 @@ export async function getPage() {
 	return _page;
 }
 
-export async function getScreenshot(html: string, type: FileType) {
+const getScreenshot = async (html: string, type: FileType) => {
 	const page = await getPage();
 	await page.setViewport({ width: 1200, height: 627 });
 	await page.setContent(html);
 	const file = await page.screenshot({ type });
 	return file;
 }
-
-export function getDomain(url: string) {
+const getDomain = (url: string) => {
 	const domainRegex = /^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/gim; //Regex found here - https://regex101.com/r/wN6cZ7/365
 	const regexArray = domainRegex.exec(url);
 	return regexArray ? regexArray[1] : '';
 }
 
-export async function parseURLRequest(req: Request, startSkipWord: string = '') {
+const parseURLRequest = async (req: Request, startSkipWord: string = '') => {
 	console.log('\x1b[36m%s\x1b[0m', 'HTTP ' + req.url, startSkipWord);
 	console.log('\x1b[33m%s\x1b[0m', 'HTTP ' + req.url, startSkipWord);
 	const { query } = parse(req.url || '/', true);
@@ -71,3 +70,4 @@ export async function parseURLRequest(req: Request, startSkipWord: string = '') 
 	return parsedRequest;
 }
 
+export { getPage, getScreenshot, parseURLRequest, getDomain };
