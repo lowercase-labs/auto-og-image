@@ -3,7 +3,7 @@
         "outDir": "dist",
         "module": "commonjs",
         "target": "esnext",
-        "baseUrl": "api",
+        "baseUrl": "url",
         "moduleResolution": "node",
         "jsx": "react",
         "sourceMap": true,

@@ -3,6 +3,20 @@ import { ParsedRequest } from './types';
 
 const tailwindcss = readFileSync(`${__dirname}/../public/css/style.css`).toString();
 
+export function getHtml(parsedReq: ParsedRequest) {
+	const { imgDomain, imgTitle, imgDesc, templateID, color } = parsedReq;
+	return `<!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="utf-8">
+                <title>Generated Image</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+            </head>
+            ${getCss()}
+            ${getBody(imgDomain, imgTitle, imgDesc, templateID, color)}
+        </html>`;
+}
+
 const getCss = () => {
 	return `
     <style>
@@ -18,7 +32,7 @@ const getCss = () => {
     </style>
     `;
 }
-const getHtmlTemplate = (imgDomain: string, imgTitle:string, imgDesc:string, templateID: number, color: string) => {
+const getBody = (imgDomain: string, imgTitle:string, imgDesc:string, templateID: number, color: string) => {
     let htmlString;
     switch(templateID) {
         case 1:
@@ -66,17 +80,4 @@ const getHtmlTemplate = (imgDomain: string, imgTitle:string, imgDesc:string, tem
             `;
     }
     return htmlString;
-}
-export function getHtml(parsedReq: ParsedRequest) {
-	const { imgDomain, imgTitle, imgDesc, templateID, color } = parsedReq;
-	return `<!DOCTYPE html>
-        <html>
-            <head>
-                <meta charset="utf-8">
-                <title>Generated Image</title>
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-            </head>
-            ${getCss()}
-            ${getHtmlTemplate(imgDomain, imgTitle, imgDesc, templateID, color)}
-        </html>`;
 }

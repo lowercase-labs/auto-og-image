@@ -1,11 +1,11 @@
 {
     "private": true,
     "scripts": {
-        "start": "node api/dist/index.js",
-        "clean": "rimraf api/dist/",
-        "prepare:css": "postcss api/public/css/tailwind.css -o api/public/css/style.css",
-        "prepare:files": "copyfiles -u 1 api/public/**/* api/dist/",
-        "build": "npm run clean && npm run prepare:css && npm run prepare:files && tsc -p api/tsconfig.json",
+        "start": "node src/dist/index.js",
+        "clean": "rimraf src/dist/",
+        "prepare:css": "postcss src/public/css/tailwind.css -o src/public/css/style.css",
+        "prepare:files": "copyfiles -u 1 src/public/**/* src/dist/",
+        "build": "npm run clean && npm run prepare:css && npm run prepare:files && tsc -p src/tsconfig.json",
         "dev": "npm run build && npm run start"
     },
     "dependencies": {
