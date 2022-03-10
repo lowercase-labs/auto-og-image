@@ -9,7 +9,7 @@ const metascraper_1 = __importDefault(require("metascraper"));
 const metascraper_title_1 = __importDefault(require("metascraper-title"));
 const metascraper_description_1 = __importDefault(require("metascraper-description"));
 const chromium_1 = require("./chromium");
-const scrapeMetaInfo = async (req, startSkipWord = '') => {
+async function scrapeMetaInfo(req, startSkipWord = '') {
     console.log('\x1b[36m%s\x1b[0m', 'HTTP ' + req.url, startSkipWord);
     const { query } = url_1.parse(req.url || '/', true);
     const { url } = query || {};
@@ -36,7 +36,7 @@ const scrapeMetaInfo = async (req, startSkipWord = '') => {
         bgColor: 'black',
     };
     return parsedRequest;
-};
+}
 exports.scrapeMetaInfo = scrapeMetaInfo;
 const getDomain = (url) => {
     const domainRegex = /^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)/gim;

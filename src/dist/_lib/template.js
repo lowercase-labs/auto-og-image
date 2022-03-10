@@ -3,6 +3,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getHtml = void 0;
 const fs_1 = require("fs");
 const tailwindcss = fs_1.readFileSync(`${__dirname}/../public/css/style.css`).toString();
+function getHtml(parsedReq) {
+    const { imgDomain, imgTitle, imgDesc, templateID, color } = parsedReq;
+    return `<!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="utf-8">
+                <title>Generated Image</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+            </head>
+            ${getCss()}
+            ${getBody(imgDomain, imgTitle, imgDesc, templateID, color)}
+        </html>`;
+}
+exports.getHtml = getHtml;
 const getCss = () => {
     return `
     <style>
@@ -67,18 +81,4 @@ const getBody = (imgDomain, imgTitle, imgDesc, templateID, color) => {
     }
     return htmlString;
 };
-function getHtml(parsedReq) {
-    const { imgDomain, imgTitle, imgDesc, templateID, color } = parsedReq;
-    return `<!DOCTYPE html>
-        <html>
-            <head>
-                <meta charset="utf-8">
-                <title>Generated Image</title>
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-            </head>
-            ${getCss()}
-            ${getBody(imgDomain, imgTitle, imgDesc, templateID, color)}
-        </html>`;
-}
-exports.getHtml = getHtml;
 //# sourceMappingURL=template.js.map
